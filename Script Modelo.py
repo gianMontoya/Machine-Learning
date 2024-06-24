@@ -11,8 +11,8 @@ def rmse(y_true, y_pred):
 
 mydb = mysql.connector.connect(
   host="localhost",
-  user="",
-  password="",
+  user="root",
+  password="admin",
   database="tesis_test"
 )
 mycursor = mydb.cursor()
@@ -92,13 +92,6 @@ for producto in productos:
     meanError = mean_absolute_error(test.values, predicciones)
     rootmeanSquaredError = rmse(test.values, predicciones)
     r2Score = r2_score(test.values, predicciones)
-
-    modelo = pm.auto_arima(df_data['ventas'].values,
-                       X=df_data[exog_vars].values,
-                       seasonal=True,
-                       m=12,
-                       suppress_warnings=True,
-                       stepwise=True)
 
     predicciones_anual = modelo.predict(n_periods=12, X=df_exog_predict[exog_vars].values)
 
