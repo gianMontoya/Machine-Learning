@@ -79,8 +79,6 @@ for producto in productos:
     train_size = int(len(df_data)*0.9333333)
     train, test = df_data['ventas'][:train_size], df_data['ventas'][train_size:]
 
-    print(f"EMPEZÓ EL ENTRENAMIENTO DEL MODELO AUTO-ARIMA para el producto {producto[0]}:")
-
     # Entrenar modelo ARIMAX en el conjunto de entrenamiento
     modelo = pm.auto_arima(train.values,
                         X=df_data[exog_vars][:train_size].values,
@@ -95,12 +93,6 @@ for producto in productos:
     rootmeanSquaredError = rmse(test.values, predicciones)
     r2Score = r2_score(test.values, predicciones)
 
-    print("\nResultados Métricas:  AUTO_ARIMA ")
-    print(f"Mean Error en el conjunto de prueba: {meanError:.2f} Kg")
-    print(f"Root Mean Squared Error en el conjunto de prueba:  vs {rootmeanSquaredError:.2f} Kg")
-    print(f"R2 en el conjunto de prueba: {r2Score:.2f}")
-
-
     modelo = pm.auto_arima(df_data['ventas'].values,
                        X=df_data[exog_vars].values,
                        seasonal=True,
@@ -109,11 +101,6 @@ for producto in productos:
                        stepwise=True)
 
     predicciones_anual = modelo.predict(n_periods=12, X=df_exog_predict[exog_vars].values)
-
-    print("\nResultado valores futuros AUTO-ARIMA:")
-    print(predicciones_anual)
-
-    print("===================================================================")
 
     ultimo_year = df_data['year'].iloc[-1]
     ultimo_mes = df_data['month'].iloc[-1]
